@@ -221,17 +221,32 @@
             color: var(--text-dark);
         }
 
-        /* شارة الكمية المتبقية على المنتج */
+        /* شارات الكمية المتبقية والبيانات */
+        .badges-container {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
         .product-stock {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #e67e22;
             background: #fef5e7;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 6px;
-            margin-bottom: 10px;
             display: inline-block;
-            width: fit-content;
+        }
+
+        .product-sold {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #27ae60;
+            background: #e8f8f5;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
         }
 
         .product-price {
@@ -513,8 +528,12 @@
             <input type="text" id="new-price" placeholder="مثال: 45 دينار">
         </div>
         <div class="admin-form-group">
-            <label>الكمية المتبقية (اختياري، مثلاً: متوفر 3 قطع / نفذت الكمية):</label>
+            <label>الكمية المتبقية (مثلاً: متوفر 3 قطع):</label>
             <input type="text" id="new-stock" placeholder="مثال: متوفر 5 قطع">
+        </div>
+        <div class="admin-form-group">
+            <label>كم تم البيع (مثلاً: تم بيع 12 قطعة):</label>
+            <input type="text" id="new-sold" placeholder="مثال: تم بيع 10 قطع">
         </div>
         <div class="admin-form-group">
             <label>صورة المنتج (اختر من ملفات الهاتف - يتم ضغطها تلقائياً):</label>
@@ -588,7 +607,7 @@
         let products = [];
         let currentFilter = 'all';
 
-        // دالة ضغط وتصغير الصورة وتحويلها إلى Base64 لتخزينها مباشرة في فايرستور دون الحاجة لـ Storage
+        // دالة ضغط وتصغير الصورة وتحويلها إلى Base64 لتخزينها مباشرة في فايرستور
         async function compressImageToBase64(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -600,7 +619,7 @@
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        const maxWidth = 500; // تصغير العرض لتخفيف الحجم
+                        const maxWidth = 500;
                         if (width > maxWidth) {
                             height = Math.round((height * maxWidth) / width);
                             width = maxWidth;
@@ -609,7 +628,6 @@
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        // ضغط الجودة إلى 60% لتكون خفيفة جداً وسريعة الحفظ
                         resolve(canvas.toDataURL('image/jpeg', 0.6));
                     };
                 };
@@ -707,13 +725,14 @@
             }
         }
 
-        // حفظ أو تعديل منتج وإرساله للسحابة مع الصورة المضغوطة مباشرة
+        // حفظ أو تعديل منتج وإرساله للسحابة مع كمية المبيعات والصورة
         window.saveProductToCloud = async function() {
             const editId = document.getElementById('edit-product-id').value;
             const title = document.getElementById('new-title').value.trim();
             const category = document.getElementById('new-category').value;
             const price = document.getElementById('new-price').value.trim();
             const stock = document.getElementById('new-stock').value.trim();
+            const sold = document.getElementById('new-sold').value.trim();
             const imgFileinput = document.getElementById('new-img-file');
             const saveBtn = document.getElementById('save-product-btn');
 
@@ -742,6 +761,7 @@
                     category, 
                     price, 
                     stock, 
+                    sold,
                     img: imgUrl, 
                     createdAt: serverTimestamp() 
                 };
@@ -784,6 +804,7 @@
                 document.getElementById('new-category').value = product.category;
                 document.getElementById('new-price').value = product.price;
                 document.getElementById('new-stock').value = product.stock || '';
+                document.getElementById('new-sold').value = product.sold || '';
                 
                 document.getElementById('form-title').innerText = 'تعديل المنتج سحابياً';
                 document.getElementById('save-product-btn').innerText = 'حفظ التعديلات بالسحابة';
@@ -798,6 +819,7 @@
             document.getElementById('new-title').value = '';
             document.getElementById('new-price').value = '';
             document.getElementById('new-stock').value = '';
+            document.getElementById('new-sold').value = '';
             document.getElementById('new-img-file').value = '';
             
             document.getElementById('form-title').innerText = 'إضافة منتج جديد سحابياً';
@@ -819,7 +841,11 @@
 
             filtered.forEach(p => {
                 let catName = p.category === 'perfumes' ? 'عطور' : p.category === 'electronics' ? 'إلكترونيات' : 'ساعات';
+                
                 let stockBadge = p.stock ? `<div class="product-stock"><i class="fa-solid fa-box-open"></i> ${p.stock}</div>` : '';
+                let soldBadge = p.sold ? `<div class="product-sold"><i class="fa-solid fa-fire"></i> ${p.sold}</div>` : '';
+                let badgesHtml = (stockBadge || soldBadge) ? `<div class="badges-container">${stockBadge}${soldBadge}</div>` : '';
+
                 let waMessage = encodeURIComponent(`مرحباً، أرغب في طلب هذا المنتج:\n- ${p.title}\n- السعر: ${p.price}`);
                 let waLink = `https://wa.me/962796115364?text=${waMessage}`;
 
@@ -829,7 +855,7 @@
                         <div class="product-info">
                             <span class="product-category">${catName}</span>
                             <h3 class="product-title">${p.title}</h3>
-                            ${stockBadge}
+                            ${badgesHtml}
                             <div class="product-price">${p.price}</div>
                             <a href="${waLink}" target="_blank" class="buy-btn"><i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i> اطلب الان</a>
                         </div>
