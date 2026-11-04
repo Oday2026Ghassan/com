@@ -70,6 +70,17 @@
             z-index: 1000;
         }
 
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .store-logo-svg {
+            width: 40px;
+            height: 40px;
+        }
+
         .logo-area h1 {
             font-size: 1.8rem;
             color: var(--accent);
@@ -435,9 +446,13 @@
     <!-- شريط الشروط والأحكام تحت التنويه -->
     <div id="terms-bar">شروط والأحكام: يرجى قراءة الشروط قبل الطلب.</div>
 
-    <!-- الهيدر -->
+    <!-- الهيدر مع الشعار الاحترافي المدمج -->
     <header>
         <div class="logo-area">
+            <svg class="store-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" stroke="#d4af37" stroke-width="6" fill="#121212"/>
+                <text x="50" y="66" font-family="'Cairo', sans-serif" font-size="50" font-weight="bold" fill="#d4af37" text-anchor="middle">ع</text>
+            </svg>
             <h1>سوق عدي</h1>
         </div>
         <ul class="nav-links">
@@ -549,33 +564,32 @@
         <p>جميع الحقوق محفوطه ©<strong id="adminTrigger">Oday Ghassan</strong></p>
     </footer>
 
-    <!-- ربط Firebase وسكربت التطبيق السحابي -->
+    <!-- ربط Firebase الجديد (sksn-23b88) وسكربت التطبيق السحابي -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-storage.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
+        // إعدادات Firebase الجديدة المحدثة
         const firebaseConfig = {
-            apiKey: "AIzaSyDqLhpvyXOjTnY0Ux7f7GOa2eE7A2I5dCA",
-            authDomain: "oday-a1ab6.firebaseapp.com",
-            projectId: "oday-a1ab6",
-            storageBucket: "oday-a1ab6.firebasestorage.app",
-            messagingSenderId: "1070227145825",
-            appId: "1:1070227145825:web:2b3e299368bebe2757d620",
-            measurementId: "G-C2EC0SJVRZ"
+            apiKey: "AIzaSyA25AFo_dRxD2STa5K5RJHFWwr035cRRp8",
+            authDomain: "sksn-23b88.firebaseapp.com",
+            projectId: "sksn-23b88",
+            storageBucket: "sksn-23b88.firebasestorage.app",
+            messagingSenderId: "1078328983623",
+            appId: "1:1078328983623:web:73f1d2ff900264eb113162",
+            measurementId: "G-6HVHVNXCFV"
         };
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
         let products = [];
         let currentFilter = 'all';
 
-        // دالة ضغط الصور لضمان سرعة الرفع وعدم تعليق الموقع
-        async function compressImage(file, maxWidth = 800, quality = 0.7) {
+        // دالة ضغط وتصغير الصورة وتحويلها إلى Base64 لتخزينها مباشرة في فايرستور دون الحاجة لـ Storage
+        async function compressImageToBase64(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -586,6 +600,7 @@
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
+                        const maxWidth = 500; // تصغير العرض لتخفيف الحجم
                         if (width > maxWidth) {
                             height = Math.round((height * maxWidth) / width);
                             width = maxWidth;
@@ -594,15 +609,14 @@
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        canvas.toBlob((blob) => {
-                            resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
-                        }, 'image/jpeg', quality);
+                        // ضغط الجودة إلى 60% لتكون خفيفة جداً وسريعة الحفظ
+                        resolve(canvas.toDataURL('image/jpeg', 0.6));
                     };
                 };
             });
         }
 
-        // جلب الإعدادات (التنويه، الشروط، وصورة البانر) والمنتجات من سحابة فايرستور
+        // جلب الإعدادات والمنتجات من قاعدة بيانات فايرستور
         async function loadCloudData() {
             try {
                 const settingsDoc = await getDoc(doc(db, "settings", "store_config"));
@@ -636,7 +650,7 @@
                 renderAdminProductsList();
             } catch (error) {
                 console.error("خطأ في جلب البيانات من السحابة: ", error);
-                document.getElementById('products-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:red;">تعذر الاتصال بالسحابة. تأكد من إعدادات قاعدة البيانات.</p>';
+                document.getElementById('products-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:red;">تعذر الاتصال بالسحابة. تأكد من قواعد الأمان في فايربيز.</p>';
             }
         }
 
@@ -669,24 +683,23 @@
             }
         }
 
-        // تحديث صورة الغلاف ورفعها بعد الضغط
+        // تحديث صورة الغلاف
         window.updateHeroImageCloud = async function() {
             const fileInput = document.getElementById('hero-img-file');
             if (fileInput.files && fileInput.files[0]) {
-                alert('جاري ضغط ورفع صورة الغلاف إلى السحابة...');
+                const btn = event.target;
+                btn.innerText = 'جاري التحديث...';
                 try {
-                    const compressedFile = await compressImage(fileInput.files[0], 1200, 0.75);
-                    const storageRef = ref(storage, 'hero_images/' + Date.now() + '_' + compressedFile.name);
-                    const snapshot = await uploadBytes(storageRef, compressedFile);
-                    const downloadURL = await getDownloadURL(snapshot.ref);
-
-                    await setDoc(doc(db, "settings", "store_config"), { heroBg: downloadURL }, { merge: true });
+                    const base64Img = await compressImageToBase64(fileInput.files[0]);
+                    await setDoc(doc(db, "settings", "store_config"), { heroBg: base64Img }, { merge: true });
                     
                     const heroSection = document.getElementById('hero-section');
-                    heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${downloadURL}')`;
+                    heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${base64Img}')`;
                     
+                    btn.innerText = 'تحديث صورة الغلاف سحابياً';
                     alert('تم تحديث وحفظ صورة الغلاف في السحابة بنجاح!');
                 } catch (error) {
+                    btn.innerText = 'تحديث صورة الغلاف سحابياً';
                     alert('فشل رفع الصورة: ' + error.message);
                 }
             } else {
@@ -694,7 +707,7 @@
             }
         }
 
-        // حفظ أو تعديل منتج وإرساله للسحابة دون تداخل أو قيود
+        // حفظ أو تعديل منتج وإرساله للسحابة مع الصورة المضغوطة مباشرة
         window.saveProductToCloud = async function() {
             const editId = document.getElementById('edit-product-id').value;
             const title = document.getElementById('new-title').value.trim();
@@ -702,13 +715,15 @@
             const price = document.getElementById('new-price').value.trim();
             const stock = document.getElementById('new-stock').value.trim();
             const imgFileinput = document.getElementById('new-img-file');
+            const saveBtn = document.getElementById('save-product-btn');
 
             if (!title || !price) {
                 alert('يرجى تعبئة حقل اسم المنتج والسعر على الأقل.');
                 return;
             }
 
-            alert('جاري معالجة وحفظ البيانات في سحابة Firebase...');
+            saveBtn.innerText = 'جاري الحفظ بالسحابة...';
+            saveBtn.disabled = true;
 
             try {
                 let imgUrl = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=500&q=80';
@@ -719,13 +734,17 @@
                 }
 
                 if (imgFileinput.files && imgFileinput.files[0]) {
-                    const compressedFile = await compressImage(imgFileinput.files[0], 800, 0.7);
-                    const storageRef = ref(storage, 'products/' + Date.now() + '_' + compressedFile.name);
-                    const snapshot = await uploadBytes(storageRef, compressedFile);
-                    imgUrl = await getDownloadURL(snapshot.ref);
+                    imgUrl = await compressImageToBase64(imgFileinput.files[0]);
                 }
 
-                const productData = { title, category, price, stock, img: imgUrl };
+                const productData = { 
+                    title, 
+                    category, 
+                    price, 
+                    stock, 
+                    img: imgUrl, 
+                    createdAt: serverTimestamp() 
+                };
 
                 if (editId) {
                     await updateDoc(doc(db, "products", editId), productData);
@@ -739,6 +758,9 @@
                 loadCloudData();
             } catch (error) {
                 alert('حدث خطأ أثناء الاتصال بالسحابة: ' + error.message);
+            } finally {
+                saveBtn.innerText = 'حفظ المنتج بالسحابة';
+                saveBtn.disabled = false;
             }
         }
 
