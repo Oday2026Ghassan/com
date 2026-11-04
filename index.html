@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سوق عدي - المتجر العصري (سحابي)</title>
+    <title>oday Market - المتجر العصري (سحابي)</title>
     <!-- مكتبة الأيقونات والخطوط -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -105,12 +105,197 @@
             color: var(--accent);
         }
 
+        /* قسم الستوريات (القصص الدائرية) */
+        .stories-section {
+            background-color: var(--white);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--gray-border);
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            max-width: 1200px;
+            margin: 20px auto 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            scrollbar-width: none; /* إخفاء شريط التمرير */
+        }
+        .stories-section::-webkit-scrollbar { display: none; }
+
+        .story-ring {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            width: 75px;
+        }
+
+        .story-circle {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-thumb {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--white);
+            background-color: #222;
+        }
+
+        .story-name {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            text-align: center;
+            color: var(--text-dark);
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        /* نافذة عرض الستوري (Story Viewer Modal) */
+        .story-viewer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .story-viewer-container {
+            width: 100%;
+            max-width: 400px;
+            height: 85vh;
+            background-color: #1a1a1a;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* شريط التقدم (Progress Bars) */
+        .story-progress-container {
+            display: flex;
+            gap: 4px;
+            padding: 10px 10px 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .story-progress-bar {
+            flex-grow: 1;
+            height: 3px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .story-progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: var(--white);
+            transition: width linear;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 15px 10px;
+            z-index: 10;
+        }
+
+        .story-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .story-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .story-user-title {
+            color: var(--white);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .story-close-btn {
+            color: var(--white);
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .story-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .story-img-display {
+            width: 100%;
+            max-height: 50vh;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .story-text-display {
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        /* مناطق النقر للتنقل اليدوي يمين ويسار */
+        .story-nav-left, .story-nav-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            z-index: 5;
+            cursor: pointer;
+        }
+        .story-nav-left { left: 0; }
+        .story-nav-right { right: 0; }
+
         /* قسم البانر الرئيسي */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
             color: var(--white);
             text-align: center;
-            padding: 100px 20px;
+            padding: 80px 20px;
         }
 
         .hero h2 {
@@ -221,7 +406,6 @@
             color: var(--text-dark);
         }
 
-        /* شارات الكمية المتبقية والبيانات */
         .badges-container {
             display: flex;
             gap: 6px;
@@ -278,7 +462,7 @@
             color: var(--white);
         }
 
-        /* المودال (النافذة المنبثقة) للخصوصية وسياسة الاسترجاع */
+        /* المودال للسياسات */
         .modal {
             display: none;
             position: fixed;
@@ -399,7 +583,7 @@
             background-color: var(--accent-hover);
         }
 
-        .admin-product-item {
+        .admin-product-item, .admin-story-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -483,7 +667,7 @@
 <body>
 
     <!-- شريط التنويه المتحرك -->
-    <div id="announcement-bar">مرحباً بكم في سوق عدي - تسوقوا أحدث العطور الإلكترونيات والساعات بأفضل الأسعار!</div>
+    <div id="announcement-bar">مرحباً بكم في oday Market - تسوقوا أحدث العطور الإلكترونيات والساعات بأفضل الأسعار!</div>
     
     <!-- شريط الشروط والأحكام تحت التنويه -->
     <div id="terms-bar">شروط والأحكام: يرجى قراءة الشروط قبل الطلب.</div>
@@ -493,15 +677,20 @@
         <div class="logo-area">
             <svg class="store-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" stroke="#d4af37" stroke-width="6" fill="#121212"/>
-                <text x="50" y="66" font-family="'Cairo', sans-serif" font-size="50" font-weight="bold" fill="#d4af37" text-anchor="middle">ع</text>
+                <text x="50" y="66" font-family="'Cairo', sans-serif" font-size="50" font-weight="bold" fill="#d4af37" text-anchor="middle">O.G</text>
             </svg>
-            <h1>سوق عدي</h1>
+            <h1>oday Market</h1>
         </div>
         <ul class="nav-links">
             <li><a href="#products">المنتجات</a></li>
             <li><a href="#contact">تواصل معنا</a></li>
         </ul>
     </header>
+
+    <!-- شريط الستوريات (القصص الدائرية) -->
+    <div class="stories-section" id="stories-container" style="display: none;">
+        <!-- يتم تعبئتها ديناميكياً من سكريبت السحابة -->
+    </div>
 
     <!-- الواجهة الرئيسية (البانر) -->
     <section class="hero" id="hero-section">
@@ -534,6 +723,28 @@
 
         <hr style="border-color: #444; margin: 20px 0;">
 
+        <!-- قسم إدارة الستوريات -->
+        <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fa-solid fa-circle-notch"></i> إدارة الستوريات (القصص)</h3>
+        <div class="admin-form-group">
+            <label>عنوان الستوري (اسم القصة):</label>
+            <input type="text" id="story-title" placeholder="مثال: عروض مميزة">
+        </div>
+        <div class="admin-form-group">
+            <label>النص المكتوب داخل الستوري (اختياري):</label>
+            <textarea id="story-text" rows="2" placeholder="اكتب تفاصيل العرض هنا..."></textarea>
+        </div>
+        <div class="admin-form-group">
+            <label>صورة الستوري (اختياري):</label>
+            <input type="file" id="story-img-file" accept="image/*">
+        </div>
+        <button class="admin-btn" onclick="saveStoryToCloud()">إضافة ستوري جديدة سحابياً</button>
+
+        <h4 style="margin-top: 20px; color: #ddd; font-size: 1rem;">الستوريات الحالية:</h4>
+        <div id="admin-stories-list" style="margin-top: 10px; max-height: 200px; overflow-y: auto; margin-bottom: 20px;"></div>
+
+        <hr style="border-color: #444; margin: 20px 0;">
+
+        <!-- قسم إدارة المنتجات -->
         <h3 id="form-title">إضافة منتج جديد سحابياً</h3>
         <input type="hidden" id="edit-product-id" value="">
         
@@ -591,21 +802,45 @@
         </div>
     </div>
 
+    <!-- نافذة عرض الستوريات (Story Viewer Modal) -->
+    <div class="story-viewer-modal" id="story-viewer">
+        <div class="story-viewer-container">
+            <!-- شريط التقدم العلوي -->
+            <div class="story-progress-container" id="story-progress-container"></div>
+            
+            <div class="story-header">
+                <div class="story-user-info">
+                    <img src="" alt="" class="story-user-avatar" id="viewer-avatar">
+                    <span class="story-user-title" id="viewer-title"></span>
+                </div>
+                <button class="story-close-btn" id="close-story-viewer">&times;</button>
+            </div>
+
+            <div class="story-body">
+                <div class="story-nav-left" onclick="prevStory()"></div>
+                <div class="story-nav-right" onclick="nextStory()"></div>
+                
+                <img src="" alt="" class="story-img-display" id="viewer-img" style="display: none;">
+                <p class="story-text-display" id="viewer-text"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- نافذة سياسة الخصوصية والشروط القانونية المنبثقة (Modal) -->
     <div class="modal" id="privacy-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-privacy">&times;</span>
-            <h3>سوق عدي - السياسات والشروط القانونية</h3>
+            <h3>oday Market - السياسات والشروط القانونية</h3>
             
             <h4>1. طبيعة العمل (منصة إلكترونية رقمية)</h4>
-            <p><strong>سوق عدي</strong> هو متجر إلكتروني رقمي بالكامل عبر شبكة الإنترنت. نحن نعمل كمنصة عرض وتسويق إلكتروني، <strong>ولا يوجد لدينا محل تجاري فعلي أو معرض على أرض الواقع</strong>. كافة الطلبات تتم وتُعالج إلكترونياً.</p>
+            <p><strong>oday Market</strong> هو متجر إلكتروني رقمي بالكامل عبر شبكة الإنترنت. نحن نعمل كمنصة عرض وتسويق إلكتروني، <strong>ولا يوجد لدينا محل تجاري فعلي أو معرض على أرض الواقع</strong>. كافة الطلبات تتم وتُعالج إلكترونياً.</p>
 
             <h4>2. مصادر المنتجات (السوق المحلي)</h4>
             <p>جميع المنتجات المعروضة يتم شراؤها وتوفيرها مباشرة من <strong>السوق المحلي</strong> والموزعين المعتمدين لضمان أفضل جودة وأسعار تنافسية لعملائنا الكرام.</p>
 
             <h4>3. سياسة الاسترجاع والاستبدال</h4>
             <ul>
-                <li>يحق للعميل استبدال أو استرجاع المنتج خلال مدة أقصاها (3 أيام) من تاريخ استلاستلام الطلب.</li>
+                <li>يحق للعميل استبدال أو استرجاع المنتج خلال مدة أقصاها (3 أيام) من تاريخ استلام الطلب.</li>
                 <li>يشرط أن يكون المنتج بحالته الأصلية، وفي غلافه الأصلي غير المفتوح، ولم يتم استعماله أو إتلاف تغليفه.</li>
                 <li>في حال وجود عيب مصنعي واضح، يتحمل المتجر كافة تكاليف الاستبدال أو الاسترجاع.</li>
                 <li>المنتجات التي تم استخدامها أو فتح تغليفها الأصلي لا تُسترجع ولا تُستبدل حفاظاً على الصحة العامة والسلامة.</li>
@@ -625,13 +860,12 @@
         <p style="margin-top: 10px;">جميع الحقوق محفوطه ©<strong id="adminTrigger">Oday Ghassan</strong></p>
     </footer>
 
-    <!-- ربط Firebase الجديد (sksn-23b88) وسكربت التطبيق السحابي -->
+    <!-- سكربت التطبيق وسحابة فايربيز -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js";
 
-        // إعدادات Firebase الجديدة المحدثة
         const firebaseConfig = {
             apiKey: "AIzaSyA25AFo_dRxD2STa5K5RJHFWwr035cRRp8",
             authDomain: "sksn-23b88.firebaseapp.com",
@@ -647,9 +881,14 @@
         const db = getFirestore(app);
 
         let products = [];
+        let stories = [];
         let currentFilter = 'all';
 
-        // دالة ضغط وتصغير الصورة وتحويلها إلى Base64 لتخزينها مباشرة في فايرستور
+        // متغيرات عارض الستوريات
+        let currentStoryIndex = 0;
+        let storyTimer = null;
+        let progressInterval = null;
+
         async function compressImageToBase64(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -676,7 +915,6 @@
             });
         }
 
-        // جلب الإعدادات والمنتجات من قاعدة بيانات فايرستور
         async function loadCloudData() {
             try {
                 const settingsDoc = await getDoc(doc(db, "settings", "store_config"));
@@ -700,21 +938,222 @@
                     }
                 }
 
+                // جلب المنتجات
                 const querySnapshot = await getDocs(collection(db, "products"));
                 products = [];
                 querySnapshot.forEach((docSnap) => {
                     products.push({ id: docSnap.id, ...docSnap.data() });
                 });
 
+                // جلب الستوريات
+                const storiesSnapshot = await getDocs(collection(db, "stories"));
+                stories = [];
+                storiesSnapshot.forEach((docSnap) => {
+                    stories.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
                 renderProducts(currentFilter);
                 renderAdminProductsList();
+                renderStoriesUI();
+                renderAdminStoriesList();
             } catch (error) {
                 console.error("خطأ في جلب البيانات من السحابة: ", error);
-                document.getElementById('products-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:red;">تعذر الاتصال بالسحابة. تأكد من قواعد الأمان في فايربيز.</p>';
             }
         }
 
-        // حفظ التنويه والشروط والأحكام في السحابة
+        // حفظ الستوري في السحابة
+        window.saveStoryToCloud = async function() {
+            const title = document.getElementById('story-title').value.trim();
+            const text = document.getElementById('story-text').value.trim();
+            const imgFileinput = document.getElementById('story-img-file');
+
+            if (!title && !text && (!imgFileinput.files || !imgFileinput.files[0])) {
+                alert('يرجى إضافة عنوان أو نص أو صورة على الأقل للستوري.');
+                return;
+            }
+
+            try {
+                let imgUrl = '';
+                if (imgFileinput.files && imgFileinput.files[0]) {
+                    imgUrl = await compressImageToBase64(imgFileinput.files[0]);
+                }
+
+                await addDoc(collection(db, "stories"), {
+                    title: title || 'oday Market',
+                    text: text || '',
+                    img: imgUrl,
+                    createdAt: serverTimestamp()
+                });
+
+                alert('تمت إضافة الستوري بنجاح!');
+                document.getElementById('story-title').value = '';
+                document.getElementById('story-text').value = '';
+                document.getElementById('story-img-file').value = '';
+                loadCloudData();
+            } catch (error) {
+                alert('حدث خطأ أثناء حفظ الستوري: ' + error.message);
+            }
+        }
+
+        window.deleteStoryCloud = async function(id) {
+            if (confirm('هل أنت متأكد من حذف هذه الستوري؟')) {
+                try {
+                    await deleteDoc(doc(db, "stories", id));
+                    loadCloudData();
+                } catch (error) {
+                    alert('خطأ في الحذف: ' + error.message);
+                }
+            }
+        }
+
+        function renderAdminStoriesList() {
+            const listDiv = document.getElementById('admin-stories-list');
+            listDiv.innerHTML = '';
+            if (stories.length === 0) {
+                listDiv.innerHTML = '<p style="color:#888; font-size:0.9rem;">لا توجد ستوريات حالياً.</p>';
+                return;
+            }
+            stories.forEach(s => {
+                listDiv.innerHTML += `
+                    <div class="admin-story-item">
+                        <span><strong>${s.title}</strong></span>
+                        <button class="delete-btn" onclick="deleteStoryCloud('${s.id}')">حذف</button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderStoriesUI() {
+            const container = document.getElementById('stories-container');
+            container.innerHTML = '';
+            if (stories.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            container.style.display = 'flex';
+
+            stories.forEach((s, index) => {
+                let thumb = s.img ? s.img : 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=150&q=80';
+                container.innerHTML += `
+                    <div class="story-ring" onclick="openStoryViewer(${index})">
+                        <div class="story-circle">
+                            <img src="${thumb}" class="story-thumb" alt="${s.title}">
+                        </div>
+                        <span class="story-name">${s.title}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // نظام عرض الستوريات والتنقل التلقائي كل 10 ثوانٍ
+        window.openStoryViewer = function(index) {
+            currentStoryIndex = index;
+            document.getElementById('story-viewer').style.display = 'flex';
+            setupProgressBars();
+            showStory(currentStoryIndex);
+            
+            // إضافة حالة لتاريخ المتصفح ليعمل زر الرجوع لإغلاق الستوري
+            history.pushState({ storyOpen: true }, "", "");
+        }
+
+        function setupProgressBars() {
+            const container = document.getElementById('story-progress-container');
+            container.innerHTML = '';
+            stories.forEach((_, i) => {
+                container.innerHTML += `
+                    <div class="story-progress-bar">
+                        <div class="story-progress-fill" id="progress-fill-${i}"></div>
+                    </div>
+                `;
+            });
+        }
+
+        function showStory(index) {
+            if (index < 0 || index >= stories.length) {
+                closeStoryViewer();
+                return;
+            }
+
+            currentStoryIndex = index;
+            const s = stories[index];
+
+            // تعبئة البيانات
+            let thumb = s.img ? s.img : 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=150&q=80';
+            document.getElementById('viewer-avatar').src = thumb;
+            document.getElementById('viewer-title').innerText = s.title;
+
+            const imgEl = document.getElementById('viewer-img');
+            const textEl = document.getElementById('viewer-text');
+
+            if (s.img) {
+                imgEl.src = s.img;
+                imgEl.style.display = 'block';
+            } else {
+                imgEl.style.display = 'none';
+            }
+
+            textEl.innerText = s.text || '';
+
+            // تحديث أشرطة التقدم
+            stories.forEach((_, i) => {
+                const fill = document.getElementById(`progress-fill-${i}`);
+                if (i < index) {
+                    fill.style.transition = 'none';
+                    fill.style.width = '100%';
+                } else if (i === index) {
+                    fill.style.transition = 'none';
+                    fill.style.width = '0%';
+                    setTimeout(() => {
+                        fill.style.transition = 'width 10s linear'; // 10 ثواني للستوري الواحد
+                        fill.style.width = '100%';
+                    }, 50);
+                } else {
+                    fill.style.transition = 'none';
+                    fill.style.width = '0%';
+                }
+            });
+
+            // مسح التوقيت السابق وبدء التوقيت لـ 10 ثواني للانتقال للستوري التالي
+            clearTimeout(storyTimer);
+            storyTimer = setTimeout(() => {
+                nextStory();
+            }, 10000); // 10 ثوانٍ בדיוק
+        }
+
+        window.nextStory = function() {
+            clearTimeout(storyTimer);
+            if (currentStoryIndex + 1 < stories.length) {
+                showStory(currentStoryIndex + 1);
+            } else {
+                closeStoryViewer();
+                if (history.state && history.state.storyOpen) {
+                    history.back();
+                }
+            }
+        }
+
+        window.prevStory = function() {
+            clearTimeout(storyTimer);
+            if (currentStoryIndex - 1 >= 0) {
+                showStory(currentStoryIndex - 1);
+            } else {
+                showStory(0);
+            }
+        }
+
+        function closeStoryViewer() {
+            clearTimeout(storyTimer);
+            document.getElementById('story-viewer').style.display = 'none';
+        }
+
+        document.getElementById('close-story-viewer').addEventListener('click', () => {
+            closeStoryViewer();
+            if (history.state && history.state.storyOpen) {
+                history.back();
+            }
+        });
+
+        // حفظ التنويه والشروط
         window.saveConfigToCloud = async function() {
             const annVal = document.getElementById('announcement-input').value.trim();
             const termsVal = document.getElementById('terms-input').value.trim();
@@ -743,7 +1182,6 @@
             }
         }
 
-        // تحديث صورة الغلاف
         window.updateHeroImageCloud = async function() {
             const fileInput = document.getElementById('hero-img-file');
             if (fileInput.files && fileInput.files[0]) {
@@ -767,7 +1205,6 @@
             }
         }
 
-        // حفظ أو تعديل منتج وإرساله للسحابة مع كمية المبيعات والصورة
         window.saveProductToCloud = async function() {
             const editId = document.getElementById('edit-product-id').value;
             const title = document.getElementById('new-title').value.trim();
@@ -928,7 +1365,7 @@
             });
         }
 
-        // تفاعل نافذة سياسة الخصوصية والشروط القانونية مع زر الرجوع (Back Button)
+        // نافذة السياسات وزر الرجوع
         const privacyModal = document.getElementById('privacy-modal');
         const privacyLink = document.getElementById('privacy-link');
         const closePrivacy = document.getElementById('close-privacy');
@@ -936,7 +1373,6 @@
         privacyLink.addEventListener('click', (e) => {
             e.preventDefault();
             privacyModal.style.display = 'flex';
-            // إضافة حالة وهمية لتاريخ المتصفح لكي يستجيب زر الرجوع لإغلاق النافذة فقط
             history.pushState({ modalOpen: true }, "", "");
         });
 
@@ -944,11 +1380,13 @@
             if (privacyModal.style.display === 'flex') {
                 privacyModal.style.display = 'none';
             }
+            if (document.getElementById('story-viewer').style.display === 'flex') {
+                closeStoryViewer();
+            }
         }
 
         closePrivacy.addEventListener('click', () => {
             closeModal();
-            // إذا أغلقها يدوياً من علامة (X)، نقوم بالرجوع خطوة في التاريخ للتخلص من الحالة الوهمية
             if (history.state && history.state.modalOpen) {
                 history.back();
             }
@@ -963,7 +1401,7 @@
             }
         });
 
-        // الاستماع لزر الرجوع في المتصفح / الهاتف لإغلاق النافذة المنبثقة بدلاً من الخروج
+        // زر الرجوع في المتصفح/الهاتف يغلق النوافذ بدلاً من مغادرة الصفحة
         window.addEventListener('popstate', (e) => {
             closeModal();
         });
@@ -987,6 +1425,7 @@
                 if (password === "ooddaayy") {
                     adminPanel.style.display = 'block';
                     renderAdminProductsList();
+                    renderAdminStoriesList();
                     alert('مرحباً بك يا عدي، تم تسجيل الدخول لوحة التحكم السحابية بنجاح!');
                     adminPanel.scrollIntoView({ behavior: 'smooth' });
                 } else if (password !== null) {
