@@ -278,7 +278,7 @@
             color: var(--white);
         }
 
-        /* المودال (النافذة المنبثقة) للخصوصية */
+        /* المودال (النافذة المنبثقة) للخصوصية وسياسة الاسترجاع */
         .modal {
             display: none;
             position: fixed;
@@ -298,20 +298,22 @@
             padding: 30px;
             border-radius: 12px;
             width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
+            max-width: 650px;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: right;
         }
 
         .close-modal {
             position: absolute;
             left: 20px;
             top: 20px;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
             color: var(--text-light);
+            font-weight: bold;
         }
 
         .close-modal:hover {
@@ -321,12 +323,26 @@
         .modal-content h3 {
             margin-bottom: 15px;
             color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 8px;
         }
 
-        .modal-content p {
+        .modal-content h4 {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .modal-content p, .modal-content li {
             color: var(--text-light);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-size: 0.95rem;
+        }
+
+        .modal-content ul {
+            padding-right: 20px;
+            margin-bottom: 10px;
         }
 
         /* لوحة تحكم الأدمن */
@@ -441,6 +457,17 @@
             text-decoration: underline;
         }
 
+        .footer-legal-link {
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0 10px;
+        }
+
+        .footer-legal-link:hover {
+            text-decoration: underline;
+        }
+
         #adminTrigger {
             cursor: pointer;
             user-select: none;
@@ -472,7 +499,6 @@
         </div>
         <ul class="nav-links">
             <li><a href="#products">المنتجات</a></li>
-            <li><a href="#" id="privacy-link">سياسة الخصوصية</a></li>
             <li><a href="#contact">تواصل معنا</a></li>
         </ul>
     </header>
@@ -565,22 +591,38 @@
         </div>
     </div>
 
-    <!-- نافذة سياسة الخصوصية المنبثقة (Modal) -->
+    <!-- نافذة سياسة الخصوصية والشروط القانونية المنبثقة (Modal) -->
     <div class="modal" id="privacy-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-privacy">&times;</span>
-            <h3>سياسة الخصوصية - سوق عدي</h3>
-            <p>نحن في <strong>سوق عدي</strong> نلتزم بحماية خصوصية بياناتك الشخصية ومعلومات تصفحك للموقع.</p>
-            <p><strong>جمع البيانات:</strong> نحافظ على سرية بيانات العملاء ولا يتم مشاركة أي معلومات شخصية مع أي أطراف ثالثة إلا لأغراض إتمام عمليات الشحن والتوصيل.</p>
-            <p><strong>الأمان:</strong> نستخدم تقنيات حديثة لضمان حماية المعاملات والتصفح الآمن داخل المتجر.</p>
-            <p>لأي استفسارات إضافية حول سياسة الخصوصية، يسعدنا تواصلكم معنا عبر وسائل الاتصال المتاحة.</p>
+            <h3>سوق عدي - السياسات والشروط القانونية</h3>
+            
+            <h4>1. طبيعة العمل (منصة إلكترونية رقمية)</h4>
+            <p><strong>سوق عدي</strong> هو متجر إلكتروني رقمي بالكامل عبر شبكة الإنترنت. نحن نعمل كمنصة عرض وتسويق إلكتروني، <strong>ولا يوجد لدينا محل تجاري فعلي أو معرض على أرض الواقع</strong>. كافة الطلبات تتم وتُعالج إلكترونياً.</p>
+
+            <h4>2. مصادر المنتجات (السوق المحلي)</h4>
+            <p>جميع المنتجات المعروضة يتم شراؤها وتوفيرها مباشرة من <strong>السوق المحلي</strong> والموزعين المعتمدين لضمان أفضل جودة وأسعار تنافسية لعملائنا الكرام.</p>
+
+            <h4>3. سياسة الاسترجاع والاستبدال</h4>
+            <ul>
+                <li>يحق للعميل استبدال أو استرجاع المنتج خلال مدة أقصاها (3 أيام) من تاريخ استلاستلام الطلب.</li>
+                <li>يشرط أن يكون المنتج بحالته الأصلية، وفي غلافه الأصلي غير المفتوح، ولم يتم استعماله أو إتلاف تغليفه.</li>
+                <li>في حال وجود عيب مصنعي واضح، يتحمل المتجر كافة تكاليف الاستبدال أو الاسترجاع.</li>
+                <li>المنتجات التي تم استخدامها أو فتح تغليفها الأصلي لا تُسترجع ولا تُستبدل حفاظاً على الصحة العامة والسلامة.</li>
+            </ul>
+
+            <h4>4. سياسة الخصوصية وأمان البيانات</h4>
+            <p>نحن نلتزم بحماية خصوصية بياناتك الشخصية (مثل الاسم ورقم الهاتف وعنوان التوصيل). لا يتم مشاركة هذه البيانات مع أي جهة خارجية إلا بالقدر اللازم لإتمام عملية التوصيل والشحن فقط.</p>
         </div>
     </div>
 
     <!-- الفوتر مع زر الأدمن المخفي داخل Oday Ghassan (10 نقرات) -->
     <footer id="contact">
         <p>للتواصل معنا والاستفسار: <a href="https://wa.me/962796115364" target="_blank" dir="ltr"><i class="fa-brands fa-whatsapp"></i> 0796115364</a></p>
-        <p>جميع الحقوق محفوطه ©<strong id="adminTrigger">Oday Ghassan</strong></p>
+        <p>
+            <span class="footer-legal-link" id="privacy-link">سياسة الخصوصية والشروط القانونية</span>
+        </p>
+        <p style="margin-top: 10px;">جميع الحقوق محفوطه ©<strong id="adminTrigger">Oday Ghassan</strong></p>
     </footer>
 
     <!-- ربط Firebase الجديد (sksn-23b88) وسكربت التطبيق السحابي -->
@@ -886,6 +928,7 @@
             });
         }
 
+        // تفاعل نافذة سياسة الخصوصية والشروط القانونية مع زر الرجوع (Back Button)
         const privacyModal = document.getElementById('privacy-modal');
         const privacyLink = document.getElementById('privacy-link');
         const closePrivacy = document.getElementById('close-privacy');
@@ -893,14 +936,36 @@
         privacyLink.addEventListener('click', (e) => {
             e.preventDefault();
             privacyModal.style.display = 'flex';
+            // إضافة حالة وهمية لتاريخ المتصفح لكي يستجيب زر الرجوع لإغلاق النافذة فقط
+            history.pushState({ modalOpen: true }, "", "");
         });
 
+        function closeModal() {
+            if (privacyModal.style.display === 'flex') {
+                privacyModal.style.display = 'none';
+            }
+        }
+
         closePrivacy.addEventListener('click', () => {
-            privacyModal.style.display = 'none';
+            closeModal();
+            // إذا أغلقها يدوياً من علامة (X)، نقوم بالرجوع خطوة في التاريخ للتخلص من الحالة الوهمية
+            if (history.state && history.state.modalOpen) {
+                history.back();
+            }
         });
 
         window.addEventListener('click', (e) => {
-            if (e.target === privacyModal) privacyModal.style.display = 'none';
+            if (e.target === privacyModal) {
+                closeModal();
+                if (history.state && history.state.modalOpen) {
+                    history.back();
+                }
+            }
+        });
+
+        // الاستماع لزر الرجوع في المتصفح / الهاتف لإغلاق النافذة المنبثقة بدلاً من الخروج
+        window.addEventListener('popstate', (e) => {
+            closeModal();
         });
 
         let clickCount = 0;
